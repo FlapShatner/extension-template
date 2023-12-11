@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 .window-form input {
-    background: #1A1A1A;
+    background: rgba(37, 37, 37, 0.986);
     border: 1px solid #D2D2D2;
+    /* color: #fff; */
 
 }
