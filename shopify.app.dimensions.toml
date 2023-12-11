@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "extension"
-client_id = "aa457c6c2a7aad43af35ffe7478ce142"
+name = "dimensions"
+client_id = "2799fbccecded86b8741bf595c244555"
 application_url = "https://shopify.dev/apps/default-app-home"
 embedded = true
 

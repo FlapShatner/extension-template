@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
  plugins: [
   shopify({
-   themeRoot: 'extensions/extension',
+   themeRoot: 'extensions/dimensions',
   }),
   react(),
  ],
