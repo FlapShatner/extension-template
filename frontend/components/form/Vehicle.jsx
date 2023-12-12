@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { getYears, cn, defaultValues } from '../utils'
+import { ErrorMessage } from '@hookform/error-message'
+import { getYears, cn } from '../utils'
 import Radio from './Radio'
 
 export default function Vehicle({ isStandard, register, watch, setValue, errors }) {
   const years = getYears()
-  const { year, make, model, doors, class: truckClass } = errors
 
   return (
     <div className={cn('mt-4', isStandard && 'opacity-40')}>
@@ -30,22 +30,27 @@ export default function Vehicle({ isStandard, register, watch, setValue, errors 
             <input {...register('model')} disabled={isStandard} className='flex flex-shrink' type='text' name='model' id='model' />
           </div>
         </div>
-        <span className='text-red-400'>Error</span>
+        {!isStandard && (
+          <div className={cn('text-center')}>
+            <ErrorMessage errors={errors} name='make' render={({ message }) => <p className='text-accent'>{message}</p>} />
+            <ErrorMessage errors={errors} name='model' render={({ message }) => <p className='text-accent'>{message}</p>} />
+          </div>
+        )}
         <div className=' flex gap-6 justify-between mt-4'>
-          <Radio value='2door' isStandard={isStandard} setValue={setValue} register={register} watch={watch}>
+          <Radio value='2DOOR' isStandard={isStandard} setValue={setValue} register={register} watch={watch}>
             2 Door
           </Radio>
-          <Radio value='4door' isStandard={isStandard} setValue={setValue} register={register} watch={watch}>
+          <Radio value='4DOOR' isStandard={isStandard} setValue={setValue} register={register} watch={watch}>
             4 Door
           </Radio>
           <div className='flex gap-2'>
             <label htmlFor='class'>Truck Class:</label>
             <select {...register('class')} disabled={isStandard} className='bg-bg-secondary border border-border' name='class' id='class'>
-              <option value='mid'>Mid Size</option>
-              <option value='half'>1/2 Ton</option>
-              <option value='threequarter'>3/4 Ton</option>
-              <option value='one'>1 Ton</option>
-              <option value='other'>Other</option>
+              <option value='MIDSIZE'>Mid Size</option>
+              <option value='HALF'>1/2 Ton</option>
+              <option value='THREEQUARTER'>3/4 Ton</option>
+              <option value='ONE'>1 Ton</option>
+              <option value='OTHER'>Other</option>
             </select>
           </div>
         </div>

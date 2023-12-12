@@ -1,8 +1,9 @@
 import React from 'react'
+import { ErrorMessage } from '@hookform/error-message'
 import { cn, formatPhoneNumber } from '../utils'
 import { states } from '../states'
 
-export default function Customize({ register, watch, setValue }) {
+export default function Customize({ register, watch, setValue, errors }) {
   const isCustomText = watch('customText')
   const isBusiness = watch('business')
   const isLogo = watch('logo')
@@ -24,6 +25,7 @@ export default function Customize({ register, watch, setValue }) {
           <div className={cn('flex flex-col', !isCustomText && 'opacity-40')}>
             <label htmlFor='customTextField'>Your custom text:</label>
             <input {...register('customTextField')} type='text' name='customTextField' id='customTextField' disabled={!isCustomText} />
+            {isCustomText && <ErrorMessage errors={errors} name='customTextField' render={({ message }) => <p className='text-accent'>{message}</p>} />}
           </div>
         </div>
         <div className='flex p-4 pb-0 '>
@@ -37,7 +39,7 @@ export default function Customize({ register, watch, setValue }) {
           </div>
           <div className={cn('flex flex-col', !isLogo && 'opacity-40')}>
             <label htmlFor='logoFile'>Upload Image</label>
-            <input disabled={!isLogo} name='logoFile' type='file' />
+            <input className={cn(!isLogo && 'text-txt-secondary')} disabled={!isLogo} name='logoFile' type='file' />
             <span className='text-sm mt-2'>
               *Logo should be vector art or high resolution .PNG file with no background. Otherwise the logo will be recreated in a printable format and you
               will be charged an extra $85, and you will receive your design either vectorized, or as a high resolution .PNG file with no background.
@@ -49,6 +51,7 @@ export default function Customize({ register, watch, setValue }) {
             <div className='flex flex-col '>
               <label htmlFor='businessName'>Business Name</label>
               <input {...register('businessName')} type='text' name='businessName' id='businessName' disabled={!isBusiness} />
+              {isBusiness && <ErrorMessage errors={errors} name='businessName' render={({ message }) => <p className='text-accent'>{message}</p>} />}
             </div>
             <div className='flex flex-col '>
               <label htmlFor='slogan'>

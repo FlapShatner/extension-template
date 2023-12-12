@@ -1,8 +1,11 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { cn, defaultValues, yupSchema } from '../utils'
+import { cn, defaultValues, checkABCErrors } from '../utils'
+import { saveWindow } from '../services'
+import { yupSchema } from '../yupSchema'
 import Vehicle from './Vehicle'
 import Customize from './Customize'
 
@@ -18,11 +21,12 @@ export default function Form() {
     resolver: yupResolver(yupSchema),
     defaultValues: defaultValues,
   })
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    const response = await saveWindow(data)
+    console.log(response)
   }
 
-  console.log(errors)
+  // console.log(errors)
   const isStandard = watch('standard')
 
   return (
@@ -58,6 +62,7 @@ export default function Form() {
                 <input disabled={isStandard} className='w-full' type='string' name='c' id='c' {...register('c')} />
               </div>
             </div>
+            {!isStandard && checkABCErrors(errors) && <p className='text-accent'> Please enter values for A B and C. </p>}
           </div>
         </div>
         <Customize register={register} watch={watch} setValue={setValue} errors={errors} />

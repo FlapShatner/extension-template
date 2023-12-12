@@ -18,6 +18,7 @@
   "cleanup": "rimraf --glob extensions/*/assets/*.{json,geetkeep}"
  },
  "dependencies": {
+  "@hookform/error-message": "^2.0.1",
   "@hookform/resolvers": "^3.3.2",
   "@shopify/app": "^3.48.0",
   "@shopify/cli": "^3.48.0",
