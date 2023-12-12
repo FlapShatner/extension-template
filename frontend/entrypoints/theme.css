@@ -4,7 +4,10 @@
 
 .window-form input {
     background: rgba(37, 37, 37, 0.986);
-    border: 1px solid #D2D2D2;
+    border: 1px solid #d1d1d1;
     /* color: #fff; */
+}
 
+::selection {
+    background: #15fc0028;
 }

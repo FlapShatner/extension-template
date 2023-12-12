@@ -1,7 +1,8 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
-import { cn } from '../utils'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { cn, defaultValues, yupSchema } from '../utils'
 import Vehicle from './Vehicle'
 import Customize from './Customize'
 
@@ -11,17 +12,25 @@ export default function Form() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm()
-  const onSubmit = (data) => console.log(data)
+  } = useForm({
+    resolver: yupResolver(yupSchema),
+    defaultValues: defaultValues,
+  })
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
+  console.log(errors)
   const isStandard = watch('standard')
 
   return (
     <div className='bg-bg-secondary p-6 text-txt-primary w-min m-auto'>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col items-start gap-4 m-auto'>
-        <div className={cn('border border-border p-4 w-[423px]', isStandard && 'text-accent')}>
+        <div className={cn('border border-border p-4 w-[423px]', isStandard && 'text-accent ')}>
           <div className='flex gap-2'>
-            <input type='checkbox' name='standard' id='standard' {...register('standard')} />
+            <input className='accent-accent' type='checkbox' name='standard' id='standard' {...register('standard')} />
             <label htmlFor='standard'>Order standard 18" x 68" size*</label>
           </div>
           <div className='text-sm flex flex-col mt-2 ml-8 text-txt-secondary'>
@@ -32,7 +41,7 @@ export default function Form() {
           </div>
         </div>
         <div className='w-[423px]'>
-          <Vehicle isStandard={isStandard} register={register} watch={watch} />
+          <Vehicle isStandard={isStandard} register={register} watch={watch} setValue={setValue} errors={errors} />
           <div className={cn('border border-t-0 border-border p-4', isStandard && 'opacity-40')}>
             <span className='my-4'>Window measurements:</span>
             <div className='flex gap-4 justify-between'>
@@ -51,7 +60,13 @@ export default function Form() {
             </div>
           </div>
         </div>
-        <Customize register={register} isStandard={isStandard} />
+        <Customize register={register} watch={watch} setValue={setValue} errors={errors} />
+        <div
+          onClick={handleSubmit(onSubmit)}
+          className='text-center cursor-pointer py-2 px-4 w-full border-2 border-border text-txt-primary hover:border-accent hover:text-accent transition-all ease-in-out duration-400'
+          type='submit'>
+          Submit
+        </div>
       </form>
       <DevTool control={control} />
     </div>
