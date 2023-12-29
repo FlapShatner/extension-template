@@ -1,68 +1,85 @@
-import { clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 
-export function cn(...inputs) {
-  return twMerge(clsx(inputs))
+
+export const formatPrice = (price, quantity) => {    
+  let result = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format((price * quantity) / 100)
+    return result
 }
 
-export const currentYear = new Date().getFullYear();
-
-export function getYears() {    
-    const years = [];
-
-    for (let year = currentYear + 1; year >= 1950; year--) {
-        years.push(year);
-    }
-
-    return years;
-}
-
-export function formatPhoneNumber(phoneNumber) {
-    // Remove all non-numeric characters
-    let digits = phoneNumber.replace(/\D/g, '');
-
-    // Format the digits based on their length
-    if (digits.length > 6) {
-        digits = digits.substring(0, 10); // Ensure not more than 10 digits
-        return `(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}`;
-    } else if (digits.length > 3) {
-        return `(${digits.substring(0, 3)}) ${digits.substring(3)}`;
-    } else if (digits.length > 0) {
-        return `(${digits}`;
-    } else {
-        return '';
+export const getCart = async () => {
+    try {
+      const cart = await fetch(window.Shopify.routes.root + 'cart.js')
+      const cartJson = await cart.json()
+      // console.log("cart", cartJson)
+      return cartJson
+    } catch {
+      console.log('error')
     }
 }
 
-export function checkABCErrors(errors) {
-  if (errors.a || errors.b || errors.c) {
-    return true;
-  } else {
-    return false;
+export const getCurrentUrl = () => {
+    const url = window.location.href
+    return url
+}    
+
+
+export const getSelectedVariant =() => {
+    const url = getCurrentUrl()
+    const variantId = url.split('variant=')[1]
+    return variantId
+}
+
+export const getCurrentProduct = async () => {
+    const url = getCurrentUrl()    
+    const productId = url.split('/products/')[1].split('?')[0]
+   const product = await fetch(window.Shopify.routes.root + 'products/' + productId + '.js')
+    const productJson = await product.json()
+    return productJson
+}
+
+
+
+export const addToCart = async (formData) => {
+    
+    try {
+        const result = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        const resultJson = await result.json()
+        // console.log("resultJson", resultJson)
+        return resultJson
+    }
+    catch {
+        console.log('error')
+    }
+}
+
+
+export const uploadImage = async (image) => {
+    const CLOUDINARY_UPLOAD_PRESET = 'jt3ld2no'
+    const CLOUDINARY_CLOUD_NAME = 'dkxssdk96'
+    const data = new FormData()
+     data.append('file', image)
+     data.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+     data.append('cloud_name', CLOUDINARY_CLOUD_NAME)
+     data.append('folder', 'Cloudinary-React')
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`, {
+        method: 'POST',
+        body: data,
+      })
+      const res = await response.json()
+      if(res.error) throw new Error(res.error.message)
+      return res.url
+    } catch (error) {
+      // console.log(error)
+      return { error: error }   
+    }
+
   }
-}
-
-
-
-export const defaultValues = {
-  standard: false,
-      a:'',
-      b:'',
-      c:'',
-      year:2023,
-      make:'',
-      model:'',
-      doors:'2DOOR',
-      class:'MIDSIZE',
-      customText:false,
-      customTextField:'',
-      business:false,
-      logo:false,
-      businessName:'',
-      slogan:'',
-      city:'',
-      state:'',
-      phone: '',
-      website:''
-}
-
