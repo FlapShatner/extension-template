@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "uploader"
-client_id = "2799fbccecded86b8741bf595c244555"
+name = "playground"
+client_id = "32d41d292f9d966cf0c25ccc9bdc5ee4"
 application_url = "https://shopify.dev/apps/default-app-home"
 embedded = true
 
@@ -13,7 +13,7 @@ scopes = ""
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
 
 [webhooks]
-api_version = "2023-10"
+api_version = "2024-01"
 
 [pos]
 embedded = false
